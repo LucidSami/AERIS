@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Page Not Found | AERIS Environmental Systems</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #111111;
+      color: #FAFAF8;
+      text-align: center;
+      padding: var(--space-xl);
+    }
+    .error-code {
+      font-family: var(--font-mono);
+      font-size: clamp(4rem, 12vw, 8rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #38BDF8;
+      margin-bottom: var(--space-sm);
+    }
+    .error-title {
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: var(--space-md);
+    }
+    .error-desc {
+      color: #94A3B8;
+      font-size: 1.1rem;
+      max-width: 500px;
+      margin-bottom: var(--space-xl);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="error-code">404</div>
+  <h1 class="error-title">ZONE UNREACHABLE</h1>
+  <p class="error-desc">The requested environmental pathway does not exist or has been relocated.</p>
+  <a href="/" class="btn btn-primary" style="background:#FFFFFF; color:#111111; font-weight:700;">
+    Return to Presentation
+  </a>
+</body>
+</html>

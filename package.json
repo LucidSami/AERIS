@@ -1,0 +1,21 @@
+{
+  "name": "aeris-clean-air-interior-system",
+  "version": "1.0.0",
+  "description": "Executive presentation website for the SMART CLEAN-AIR INTERIOR SYSTEM concept",
+  "private": true,
+  "scripts": {
+    "dev": "npx -y serve -l 3000 .",
+    "start": "npx -y serve -l 3000 ."
+  },
+  "keywords": [
+    "clean-air",
+    "indoor-environmental-system",
+    "passive-house",
+    "erv",
+    "hrv",
+    "architecture",
+    "climate-tech"
+  ],
+  "author": "R&D Architecture Team",
+  "license": "UNLICENSED"
+}

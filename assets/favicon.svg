@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" rx="8" fill="#1A1A1A"/>
+  <!-- Elegant geometric stylized A / airflow mark -->
+  <path d="M16 6 L25 24 L20.5 24 L16 14.5 L11.5 24 L7 24 Z" fill="#38BDF8"/>
+  <circle cx="16" cy="18" r="2.5" fill="#34D399"/>
+</svg>
