@@ -433,47 +433,82 @@ strong.text-inverse {
   font-weight: 600;
 }
 
-/* Light Card Typography */
-.card h3, .card h4 {
+/* Light Card Typography (only cards without .card-dark) */
+.card:not(.card-dark) h3, .card:not(.card-dark) h4 {
   color: #0F172A;
   font-weight: 700;
 }
-.card p {
+.card:not(.card-dark) p {
   color: #334155;
   font-size: 1.05rem;
   line-height: 1.7;
 }
-.card .text-caption {
+.card:not(.card-dark) .text-caption {
   color: #475569;
   font-size: 0.95rem;
   line-height: 1.6;
 }
-.card .limitations-list {
+.card:not(.card-dark) .limitations-list {
   color: #334155;
 }
-.card .limitations-list li {
+.card:not(.card-dark) .limitations-list li {
   color: #334155;
   font-size: 1rem;
   line-height: 1.75;
 }
 
-/* Dark Card Typography */
-.card-dark h3, .card-dark h4 {
-  color: #FFFFFF;
+/* Dark Card & Dark Section Typography Overrides */
+.card-dark,
+.card.card-dark,
+.dark-section .card {
+  color: #F8FAFC;
+}
+
+.card-dark h3, .card-dark h4,
+.card.card-dark h3, .card.card-dark h4,
+.dark-section .card h3, .dark-section .card h4 {
+  color: #FFFFFF !important;
   font-weight: 700;
 }
-.card-dark p {
-  color: #E2E8F0;
+
+.card-dark p,
+.card.card-dark p,
+.dark-section .card p {
+  color: #E2E8F0 !important;
   font-size: 1.05rem;
   line-height: 1.7;
 }
-.card-dark .text-caption {
-  color: #CBD5E1;
+
+.card-dark .text-caption,
+.card.card-dark .text-caption,
+.dark-section .card .text-caption {
+  color: #CBD5E1 !important;
   font-size: 0.95rem;
   line-height: 1.6;
 }
-.card-dark strong {
-  color: #FFFFFF;
+
+.card-dark strong,
+.card.card-dark strong,
+.dark-section .card strong {
+  color: #FFFFFF !important;
+}
+
+.card-dark ul, .card-dark ol, .card-dark li,
+.card.card-dark ul, .card.card-dark ol, .card.card-dark li,
+.dark-section .card ul, .dark-section .card ol, .dark-section .card li,
+.card-dark .limitations-list,
+.card-dark .limitations-list li,
+.card.card-dark .limitations-list,
+.card.card-dark .limitations-list li,
+.dark-section .limitations-list,
+.dark-section .limitations-list li {
+  color: #F1F5F9 !important;
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.dark-section .text-caption {
+  color: #CBD5E1 !important;
 }
 
 /* Competitor Table */

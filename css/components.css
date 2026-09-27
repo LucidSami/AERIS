@@ -62,7 +62,7 @@
 .card-dark {
   background-color: #222;
   border-color: #333;
-  color: var(--color-text-inverse);
+  color: #F8FAFC;
 }
 .card-dark:hover {
   background-color: #2A2A2A;
@@ -70,7 +70,11 @@
 }
 
 .card-dark p {
-  color: #D5D5D5;
+  color: #E2E8F0;
+}
+
+.card-dark li {
+  color: #F1F5F9;
 }
 
 /* Icons / Indicators */
