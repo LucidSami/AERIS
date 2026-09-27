@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <rect width="32" height="32" rx="8" fill="#1A1A1A"/>
-  <!-- Elegant geometric stylized A / airflow mark -->
-  <path d="M16 6 L25 24 L20.5 24 L16 14.5 L11.5 24 L7 24 Z" fill="#38BDF8"/>
-  <circle cx="16" cy="18" r="2.5" fill="#34D399"/>
+  <rect width="32" height="32" rx="8" fill="#0F172A"/>
+  <!-- Modern architectural clean-air sanctuary house icon -->
+  <path d="M6 13.5L16 6l10 7.5V25a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V13.5z" fill="none" stroke="#38BDF8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12.5 27V16.5h7V27" fill="none" stroke="#34D399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
