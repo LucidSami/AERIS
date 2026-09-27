@@ -1,106 +1,392 @@
+/* ==========================================================================
+   AERIS SYSTEMS R&D — Universal Responsive Engine
+   Refined for Ultra-Wide (4K / 1600px+), Desktop, Tablets & Mobile (320px+)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Large Screens & 4K Presentation Displays (min-width: 1600px)
+   -------------------------------------------------------------------------- */
+@media (min-width: 1600px) {
+  :root {
+    --max-width-content: 1400px;
+    --max-width-wide: 1680px;
+    --text-hero: clamp(4.5rem, 6.5vw, 7.5rem);
+  }
+  
+  .container {
+    padding: 0 var(--space-xl);
+  }
+
+  #room-svg-wrapper,
+  .subsystem-nav {
+    max-width: 960px;
+  }
+  
+  .info-panel {
+    width: 360px;
+  }
+
+  .grid-4 {
+    gap: var(--space-lg);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. Medium Desktops & Tablets (max-width: 1024px)
+   -------------------------------------------------------------------------- */
 @media (max-width: 1024px) {
   .hero-subtitle {
     font-size: 1.25rem;
   }
-  .equation-diagram {
-    gap: var(--space-sm);
-  }
-  .eq-box {
-    padding: var(--space-md);
-    font-size: 0.8rem;
-  }
-  .node {
-    width: 100px;
-    font-size: 0.8rem;
-    padding: var(--space-sm);
-  }
-}
-
-@media (max-width: 768px) {
-  .nav-links {
-    display: none; /* Mobile menu toggle logic to be handled by JS */
-  }
-  .nav-mobile-toggle {
-    display: block;
-    width: 24px;
-    height: 24px;
-    position: relative;
-  }
-  .hamburger {
-    display: block;
-    width: 100%;
-    height: 2px;
-    background: var(--color-text-primary);
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    transition: background 0.2s;
-  }
-  .hamburger::before, .hamburger::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    background: var(--color-text-primary);
-    left: 0;
-    transition: transform 0.2s;
-  }
-  .hamburger::before { top: -6px; }
-  .hamburger::after { bottom: -6px; }
-
-  /* Mobile menu active state classes to be toggled by JS */
-  .nav-menu-active .nav-links {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: var(--nav-height);
-    left: 0;
-    width: 100%;
-    background: rgba(250, 250, 248, 0.98);
-    padding: var(--space-lg);
-    border-bottom: 1px solid var(--color-border);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-  }
-  .nav-menu-active .hamburger { background: transparent; }
-  .nav-menu-active .hamburger::before { transform: translateY(6px) rotate(45deg); }
-  .nav-menu-active .hamburger::after { transform: translateY(-6px) rotate(-45deg); }
-
-  .hero-ctas {
-    flex-direction: column;
-    width: 100%;
-  }
-  .hero-ctas .btn {
-    width: 100%;
-  }
   
+  /* Grids wrap to 2 columns */
+  .grid-4 { 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: var(--space-md);
+  }
+  .grid-3 { 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: var(--space-md);
+  }
+
+  /* Interactive Room Container - Column Layout */
+  .interactive-room-container {
+    flex-direction: column;
+    min-height: auto;
+    padding: var(--space-lg) var(--space-md);
+    overflow: visible;
+  }
+
+  #room-svg-wrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .subsystem-nav {
+    max-width: 100%;
+  }
+
+  /* Info Panel: Inline Card on Tablets & Mobile (not absolute floating) */
   .info-panel {
     position: relative;
     top: auto;
     right: auto;
     width: 100%;
-    transform: translateY(20px);
+    max-width: 100%;
     margin-top: var(--space-md);
+    transform: none;
+    opacity: 1;
+    display: none;
+    pointer-events: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   }
+
   .info-panel.active {
-    transform: translateY(0);
+    display: block;
+    animation: panelSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  
+
+  /* Equation diagram */
   .equation-diagram {
-    flex-direction: column;
+    gap: var(--space-sm);
+  }
+  .eq-box {
+    padding: var(--space-md);
+    font-size: 0.85rem;
   }
   
-  .site-footer .container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-sm);
+  /* System nodes in missing-system */
+  .node {
+    width: 110px;
+    font-size: 0.85rem;
+    padding: var(--space-sm);
   }
 }
 
-@media (max-width: 480px) {
+/* --------------------------------------------------------------------------
+   3. Mobile Devices (max-width: 768px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
   :root {
-    --space-section: 4rem;
+    --space-section: 4.5rem;
+    --nav-height: 52px;
   }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  .container {
+    padding: 0 var(--space-md);
+  }
+
+  /* Section Padding */
+  .section {
+    padding: calc(var(--space-section) * 0.75) 0;
+  }
+
+  /* Mobile Navigation Bar */
+  .nav-links {
+    display: none;
+  }
+
+  .nav-mobile-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.04);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+  }
+
+  .hamburger {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: #0F172A;
+    position: relative;
+    transition: background 0.2s;
+  }
+
+  .hamburger::before,
+  .hamburger::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 2px;
+    background: #0F172A;
+    left: 0;
+    transition: transform 0.25s ease;
+  }
+
+  .hamburger::before { top: -6px; }
+  .hamburger::after { bottom: -6px; }
+
+  /* Fullscreen Architectural Mobile Drawer */
+  .nav-menu-active .nav-links {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    width: 100%;
+    height: calc(100vh - var(--nav-height));
+    height: calc(100dvh - var(--nav-height));
+    background: rgba(15, 23, 42, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: var(--space-lg) var(--space-md);
+    gap: 4px;
+    overflow-y: auto;
+    z-index: 9999;
+  }
+
+  .nav-menu-active .nav-links li {
+    width: 100%;
+    list-style: none;
+  }
+
+  .nav-menu-active .nav-links a {
+    color: #F8FAFC !important;
+    font-size: 1.15rem;
+    font-weight: 600;
+    padding: 12px 16px;
+    border-radius: 8px;
+    display: block;
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.2s ease;
+  }
+
+  .nav-menu-active .nav-links a:hover,
+  .nav-menu-active .nav-links a.active {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38BDF8 !important;
+    padding-left: 20px;
+  }
+
+  .nav-menu-active .hamburger { background: transparent; }
+  .nav-menu-active .hamburger::before { transform: translateY(6px) rotate(45deg); }
+  .nav-menu-active .hamburger::after { transform: translateY(-6px) rotate(-45deg); }
+
+  /* Hero Section */
+  .hero-section {
+    min-height: 100svh;
+    padding: calc(var(--nav-height) + 2.5rem) 0 var(--space-xl);
+  }
+
+  #hero-title {
+    font-size: clamp(2.1rem, 7vw, 3.5rem);
+    line-height: 1.05;
+  }
+
+  .hero-subtitle {
+    font-size: 1.0625rem;
+    line-height: 1.55;
+  }
+
+  .hero-ctas {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .hero-ctas .btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 48px;
+  }
+
+  .hero-sensors {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+    margin-top: var(--space-lg);
+  }
+
   .sensor-badge {
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .sensor-label {
+    margin-bottom: 0;
+  }
+
+  /* All Grids Stack Cleanly to 1 Column */
+  .grid-2, 
+  .grid-3, 
+  .grid-4 {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-md);
+  }
+
+  /* Interactive Room Cutaway on Mobile */
+  .interactive-room-container {
+    padding: var(--space-sm);
+    border-radius: 12px;
+  }
+
+  #room-svg-wrapper {
+    margin: 0;
+  }
+
+  /* Tables: Touch Horizontal Swipe */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    margin: 0 -4px;
+    padding: 0 4px;
+  }
+
+  .table-container table {
+    min-width: 680px;
+  }
+
+  /* Equation Diagram */
+  .equation-diagram {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .eq-box {
+    width: 100%;
+    max-width: 320px;
+    text-align: center;
+    padding: 12px 16px;
+    font-size: 0.875rem;
+  }
+
+  .eq-operator, 
+  .eq-equals {
+    font-size: 1.4rem;
+    line-height: 1;
+    margin: 2px 0;
+  }
+
+  /* System Nodes Grid */
+  .node-container {
+    gap: 10px;
+  }
+
+  .node {
+    width: calc(50% - 5px);
+    max-width: 160px;
+    padding: 10px;
+    font-size: 0.8125rem;
+  }
+
+  /* Footer */
+  .site-footer .container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+    text-align: left;
+  }
+
+  .site-footer .text-caption {
+    text-align: left !important;
+  }
+
+  /* Status Badges word-wrapping */
+  .status-badge {
+    max-width: 100%;
+    white-space: normal;
+    word-break: break-word;
+    display: inline-block;
+  }
+
+  /* Touch Targets for interactive buttons */
+  .btn,
+  .subsystem-pill {
+    min-height: 38px;
+  }
+
+  /* Checklist items in Decision Gate */
+  .border-bottom.flex-between {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Very Small Phones (max-width: 400px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 400px) {
+  #hero-title {
+    font-size: 1.95rem;
+  }
+
+  .subsystem-pill {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+
+  .nav-brand-text {
+    font-size: 0.95rem;
+  }
+
+  .nav-brand-badge {
+    font-size: 0.65rem;
+    padding: 2px 5px;
+  }
+}
+
+/* Animation for panel slide-in */
+@keyframes panelSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

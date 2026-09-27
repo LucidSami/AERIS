@@ -231,7 +231,117 @@
         
         <div class="interactive-room-container reveal-fade">
           <div id="room-svg-wrapper">
-            <!-- SVG injected via js/interactive-room.js -->
+            <svg viewBox="0 0 800 500" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" aria-label="Interactive Room Cutaway Diagram" style="display:block; width:100%; height:auto;">
+              <defs>
+                <linearGradient id="wallGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#EBE9E4" />
+                  <stop offset="100%" stop-color="#DCDAD5" />
+                </linearGradient>
+                <linearGradient id="floorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#C4956A" stop-opacity="0.2"/>
+                  <stop offset="100%" stop-color="#C4956A" stop-opacity="0.4"/>
+                </linearGradient>
+                
+                <style>
+                  .airflow-path {
+                    stroke-dasharray: 10;
+                    animation: dash-flow 2s linear infinite;
+                  }
+                  @keyframes dash-flow {
+                    to { stroke-dashoffset: -20; }
+                  }
+                  .hotspot-group {
+                    cursor: pointer;
+                    outline: none;
+                  }
+                  .hotspot-dot {
+                    transform-origin: center;
+                    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), fill 0.2s, stroke 0.2s;
+                  }
+                  .hotspot-group:hover .hotspot-dot,
+                  .hotspot-group:focus-visible .hotspot-dot,
+                  .hotspot-group.active .hotspot-dot {
+                    transform: scale(1.35);
+                    fill: #0284C7 !important;
+                    stroke: #FFFFFF !important;
+                  }
+                  .hotspot-group.active .hotspot-pulse {
+                    stroke: #0284C7;
+                    animation-duration: 1.4s;
+                  }
+                  .hotspot-pulse {
+                    transform-origin: center;
+                    animation: pulse-ring 2.2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+                  }
+                  @keyframes pulse-ring {
+                    0% { transform: scale(0.7); opacity: 0.9; }
+                    100% { transform: scale(2.6); opacity: 0; }
+                  }
+                </style>
+              </defs>
+
+              <!-- Background / Structure -->
+              <g id="room-structure" stroke="#4A4A4A" stroke-width="1.5" stroke-linejoin="round">
+                <polygon points="150,100 650,100 650,400 150,400" fill="url(#wallGrad)" />
+                <polygon points="50,50 150,100 150,400 50,450" fill="#E2E0DC" />
+                <polygon points="650,100 750,50 750,450 650,400" fill="#D2D0CC" />
+                <polygon points="50,450 150,400 650,400 750,450" fill="url(#floorGrad)" />
+                <polygon points="50,50 150,100 650,100 750,50" fill="#FAFAF8" />
+              </g>
+
+              <!-- Architectural Elements -->
+              <!-- Window (Left Wall) -->
+              <g id="element-window" stroke="#333" stroke-width="1.5">
+                <polygon points="70,180 130,210 130,320 70,290" fill="#E8F0FA" opacity="0.6"/>
+                <line x1="100" y1="195" x2="100" y2="305" />
+              </g>
+              
+              <!-- Door (Right Wall) -->
+              <g id="element-door" stroke="#333" stroke-width="1.5">
+                <polygon points="670,200 710,180 710,430 670,390" fill="#FBF3EB" />
+                <circle cx="680" cy="300" r="3" fill="#333" />
+              </g>
+
+              <!-- Ceiling Unit (HRV/ERV) -->
+              <g id="element-hrv" stroke="#333" stroke-width="1.5">
+                <rect x="350" y="85" width="100" height="30" fill="#F2F0ED" rx="2" />
+                <line x1="360" y1="100" x2="440" y2="100" stroke-dasharray="2" />
+              </g>
+
+              <!-- Sensor (Back Wall) -->
+              <g id="element-sensor" stroke="#333" stroke-width="1">
+                <rect x="500" y="200" width="20" height="30" fill="#FAFAF8" rx="2" />
+                <circle cx="510" cy="210" r="4" fill="#2D8F6F" />
+              </g>
+
+              <!-- Furniture (Abstract) -->
+              <g id="element-furniture" stroke="#4A4A4A" stroke-width="1.5">
+                <rect x="250" y="340" width="200" height="40" fill="#DCDAD5" rx="4" />
+                <rect x="250" y="280" width="30" height="100" fill="#DCDAD5" rx="4" />
+              </g>
+
+              <!-- Solar Panel (Outside/Roof visual) -->
+              <g id="element-solar" stroke="#333" stroke-width="1" opacity="0.7">
+                <polygon points="500,30 580,30 550,60 470,60" fill="#3B7DD8" />
+                <line x1="490" y1="40" x2="560" y2="40" />
+                <line x1="480" y1="50" x2="550" y2="50" />
+              </g>
+
+              <!-- Airflow Paths -->
+              <g id="airflow-lines" fill="none" stroke-width="2" class="airflow-path">
+                <path d="M400,115 C400,180 300,200 300,280" stroke="#3B7DD8" />
+                <path d="M550,300 C550,200 450,180 450,115" stroke="#C44D4D" />
+              </g>
+
+              <!-- Hotspots -->
+              <g id="hotspots"></g>
+            </svg>
+          </div>
+
+          <!-- Quick Subsystem Selector Navigation -->
+          <div class="subsystem-nav" aria-label="Room Subsystem Navigation">
+            <div class="subsystem-nav-label">Tap to inspect subsystem:</div>
+            <div class="subsystem-pills" id="subsystem-pills"></div>
           </div>
           
           <!-- Slide-in Technical Details Panel -->

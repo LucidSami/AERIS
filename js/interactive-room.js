@@ -4,9 +4,9 @@ export function initInteractiveRoom() {
   const wrapper = document.getElementById('room-svg-wrapper');
   if (!wrapper) return;
 
-  // Render SVG
+  // Render SVG with clean responsive attributes
   const svgContent = `
-    <svg viewBox="0 0 800 500" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-label="Interactive Room Cutaway Diagram">
+    <svg viewBox="0 0 800 500" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg" aria-label="Interactive Room Cutaway Diagram" style="display:block; width:100%; height:auto;">
       <defs>
         <linearGradient id="wallGrad" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stop-color="#EBE9E4" />
@@ -26,22 +26,32 @@ export function initInteractiveRoom() {
           @keyframes dash-flow {
             to { stroke-dashoffset: -20; }
           }
+          .hotspot-group {
+            cursor: pointer;
+            outline: none;
+          }
           .hotspot-dot {
             transform-origin: center;
-            transition: transform 0.2s, fill 0.2s;
-            cursor: pointer;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), fill 0.2s, stroke 0.2s;
           }
-          .hotspot-group:hover .hotspot-dot {
-            transform: scale(1.5);
-            fill: var(--color-accent-blue);
+          .hotspot-group:hover .hotspot-dot,
+          .hotspot-group:focus-visible .hotspot-dot,
+          .hotspot-group.active .hotspot-dot {
+            transform: scale(1.35);
+            fill: #0284C7 !important;
+            stroke: #FFFFFF !important;
+          }
+          .hotspot-group.active .hotspot-pulse {
+            stroke: #0284C7;
+            animation-duration: 1.4s;
           }
           .hotspot-pulse {
             transform-origin: center;
-            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+            animation: pulse-ring 2.2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
           }
           @keyframes pulse-ring {
-            0% { transform: scale(0.8); opacity: 0.8; }
-            100% { transform: scale(2.5); opacity: 0; }
+            0% { transform: scale(0.7); opacity: 0.9; }
+            100% { transform: scale(2.6); opacity: 0; }
           }
         </style>
       </defs>
@@ -107,63 +117,122 @@ export function initInteractiveRoom() {
         <path d="M550,300 C550,200 450,180 450,115" stroke="#C44D4D" />
       </g>
 
-      <!-- Hotspots -->
+      <!-- Hotspots Group -->
       <g id="hotspots"></g>
     </svg>
   `;
-  wrapper.innerHTML = svgContent;
+  let hotspotsContainer = wrapper.querySelector('#hotspots');
+  if (!hotspotsContainer) {
+    wrapper.innerHTML = svgContent;
+    hotspotsContainer = wrapper.querySelector('#hotspots');
+  } else {
+    hotspotsContainer.innerHTML = '';
+  }
 
-  const hotspotsContainer = wrapper.querySelector('#hotspots');
   const infoPanel = document.getElementById('room-info-panel');
-  const btnClose = infoPanel.querySelector('.btn-close');
+  const btnClose = infoPanel ? infoPanel.querySelector('.btn-close') : null;
 
   // Hardcoded positions mapping to IDs for this specific SVG viewBox
   const coords = {
-    1: {x: 100, y: 250}, // Window (Airtight)
-    2: {x: 690, y: 380}, // Door
-    3: {x: 400, y: 100}, // HRV
-    4: {x: 200, y: 250}, // Air purifying wall
-    5: {x: 510, y: 215}, // Sensor
-    6: {x: 525, y: 45},  // Solar
-    7: {x: 650, y: 300}, // Acoustic (wall corner)
-    8: {x: 350, y: 360}, // Furniture
-    9: {x: 450, y: 150}  // Vent paths
+    1: {x: 100, y: 250, label: "01. Envelope"},
+    2: {x: 690, y: 380, label: "02. Gaskets"},
+    3: {x: 400, y: 100, label: "03. ERV Core"},
+    4: {x: 200, y: 250, label: "04. Air Wall"},
+    5: {x: 510, y: 215, label: "05. Sensors"},
+    6: {x: 525, y: 45,  label: "06. 24V Solar"},
+    7: {x: 650, y: 300, label: "07. Acoustics"},
+    8: {x: 350, y: 360, label: "08. Millwork"},
+    9: {x: 450, y: 150, label: "09. Vents"}
   };
 
   let activeHotspot = null;
+  const hotspotElements = {};
+  const pillElements = {};
+
+  // Build or find subsystem selector container
+  let pillsContainer = document.getElementById('subsystem-pills');
+  if (!pillsContainer) {
+    const navWrapper = document.createElement('div');
+    navWrapper.className = 'subsystem-nav';
+    navWrapper.innerHTML = `
+      <div class="subsystem-nav-label">Tap to inspect subsystem:</div>
+      <div class="subsystem-pills" id="subsystem-pills"></div>
+    `;
+    wrapper.parentNode.insertBefore(navWrapper, infoPanel);
+    pillsContainer = navWrapper.querySelector('#subsystem-pills');
+  } else {
+    pillsContainer.innerHTML = '';
+  }
 
   SYSTEM_COMPONENTS.forEach(comp => {
     const pos = coords[comp.id];
     if (!pos) return;
 
+    // 1. Create SVG Hotspot
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g.setAttribute("class", "hotspot-group");
+    g.setAttribute("id", `hotspot-${comp.id}`);
     g.setAttribute("transform", `translate(${pos.x}, ${pos.y})`);
     g.setAttribute("tabindex", "0");
     g.setAttribute("role", "button");
-    g.setAttribute("aria-label", `View details for ${comp.title}`);
+    g.setAttribute("aria-label", `View specifications for ${comp.title}`);
+
+    // Large invisible touch target for effortless mobile tapping (48px diameter)
+    const touchTarget = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    touchTarget.setAttribute("r", "24");
+    touchTarget.setAttribute("fill", "transparent");
+    touchTarget.setAttribute("style", "pointer-events:all;");
 
     // Pulse ring
     const pulse = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     pulse.setAttribute("class", "hotspot-pulse");
-    pulse.setAttribute("r", "8");
+    pulse.setAttribute("r", "9");
     pulse.setAttribute("fill", "none");
-    pulse.setAttribute("stroke", "#3B7DD8");
+    pulse.setAttribute("stroke", "#38BDF8");
     pulse.setAttribute("stroke-width", "2");
     
-    // Core dot
+    // Core dot with high-contrast border
     const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     dot.setAttribute("class", "hotspot-dot");
-    dot.setAttribute("r", "6");
-    dot.setAttribute("fill", "#1A1A1A");
+    dot.setAttribute("r", "7.5");
+    dot.setAttribute("fill", "#0F172A");
+    dot.setAttribute("stroke", "#FFFFFF");
+    dot.setAttribute("stroke-width", "2");
 
+    // Center indicator dot
+    const centerDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    centerDot.setAttribute("r", "3");
+    centerDot.setAttribute("fill", "#38BDF8");
+
+    // Small numerical badge
+    const badgeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    badgeText.setAttribute("y", "-13");
+    badgeText.setAttribute("text-anchor", "middle");
+    badgeText.setAttribute("font-size", "10");
+    badgeText.setAttribute("font-weight", "800");
+    badgeText.setAttribute("fill", "#0F172A");
+    badgeText.textContent = `0${comp.id}`;
+
+    g.appendChild(touchTarget);
     g.appendChild(pulse);
     g.appendChild(dot);
+    g.appendChild(centerDot);
+    g.appendChild(badgeText);
     hotspotsContainer.appendChild(g);
+    hotspotElements[comp.id] = g;
+
+    // 2. Create Mobile Quick-Selector Pill
+    const pill = document.createElement('button');
+    pill.type = 'button';
+    pill.className = 'subsystem-pill';
+    pill.id = `pill-${comp.id}`;
+    pill.textContent = pos.label || comp.title;
+    pillsContainer.appendChild(pill);
+    pillElements[comp.id] = pill;
 
     // Event listeners
     const triggerPanel = (e) => {
-      e.stopPropagation();
+      if (e) e.stopPropagation();
       openPanel(comp);
     };
 
@@ -174,9 +243,13 @@ export function initInteractiveRoom() {
         triggerPanel(e);
       }
     });
+
+    pill.addEventListener('click', triggerPanel);
   });
 
   function openPanel(comp) {
+    if (!infoPanel) return;
+
     infoPanel.querySelector('.panel-number').textContent = `0${comp.id}`;
     infoPanel.querySelector('.panel-title').textContent = comp.title;
     infoPanel.querySelector('.panel-desc').textContent = comp.desc;
@@ -187,20 +260,47 @@ export function initInteractiveRoom() {
       specsEl.textContent = comp.techSpecs;
     }
     
+    // Highlight active hotspot and pill
+    Object.keys(hotspotElements).forEach(id => {
+      hotspotElements[id].classList.toggle('active', Number(id) === comp.id);
+    });
+    Object.keys(pillElements).forEach(id => {
+      pillElements[id].classList.toggle('active', Number(id) === comp.id);
+    });
+
     infoPanel.classList.add('active');
     activeHotspot = comp.id;
+
+    // On mobile devices, smoothly ensure the panel is within viewport view
+    if (window.innerWidth <= 1024) {
+      setTimeout(() => {
+        infoPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
   }
 
   function closePanel() {
+    if (!infoPanel) return;
     infoPanel.classList.remove('active');
+    Object.keys(hotspotElements).forEach(id => {
+      hotspotElements[id].classList.remove('active');
+    });
+    Object.keys(pillElements).forEach(id => {
+      pillElements[id].classList.remove('active');
+    });
     activeHotspot = null;
   }
 
-  btnClose.addEventListener('click', closePanel);
+  if (btnClose) {
+    btnClose.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closePanel();
+    });
+  }
   
-  // Close when clicking outside
+  // Close when clicking outside on desktop
   document.addEventListener('click', (e) => {
-    if (activeHotspot && !infoPanel.contains(e.target) && !wrapper.contains(e.target)) {
+    if (activeHotspot && !infoPanel.contains(e.target) && !wrapper.contains(e.target) && !pillsContainer.contains(e.target)) {
       closePanel();
     }
   });

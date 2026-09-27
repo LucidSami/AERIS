@@ -219,19 +219,79 @@
 .interactive-room-container {
   position: relative;
   background: var(--color-bg-secondary);
-  border-radius: 12px;
-  padding: var(--space-xl);
-  min-height: 500px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: var(--space-lg);
+  min-height: auto;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible;
 }
 
 #room-svg-wrapper {
   width: 100%;
   max-width: 800px;
   height: auto;
+  position: relative;
+}
+
+#room-svg-wrapper svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Subsystem Quick-Selector Navigation */
+.subsystem-nav {
+  width: 100%;
+  max-width: 800px;
+  margin-top: var(--space-md);
+}
+
+.subsystem-nav-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  margin-bottom: 8px;
+}
+
+.subsystem-pills {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.subsystem-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.subsystem-pill {
+  flex: 0 0 auto;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: #FFFFFF;
+  border: 1px solid var(--color-border);
+  color: #334155;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.subsystem-pill:hover,
+.subsystem-pill.active {
+  background: var(--color-accent-blue);
+  color: #FFFFFF;
+  border-color: var(--color-accent-blue);
+  box-shadow: 0 4px 12px rgba(59, 125, 216, 0.25);
 }
 
 .info-panel {
@@ -239,16 +299,17 @@
   top: var(--space-md);
   right: var(--space-md);
   width: 320px;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-radius: 12px;
+  border: 1px solid var(--color-border);
   padding: var(--space-lg);
   box-shadow: 0 20px 60px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
   transform: translateX(110%) scale(0.95);
   opacity: 0;
-  transition: transform 0.6s var(--ease-spring),
-              opacity 0.4s var(--ease-out-quint);
+  transition: transform 0.5s var(--ease-spring),
+              opacity 0.35s var(--ease-out-quint);
   pointer-events: none;
   z-index: 20;
 }
